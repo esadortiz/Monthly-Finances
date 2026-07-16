@@ -153,6 +153,7 @@ function traducirError(mensaje: string): string {
     "User already registered": "Ya existe una cuenta con este correo",
     "Email not confirmed": "Debes confirmar tu correo antes de iniciar sesión",
     "Password should be at least 6 characters": "La contraseña debe tener al menos 6 caracteres",
+    "Email rate limit exceeded": "Demasiados intentos con este correo. Espera una hora e intenta de nuevo.",
   }
   return errores[mensaje] ?? mensaje
 }

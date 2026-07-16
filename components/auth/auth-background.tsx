@@ -1,22 +1,30 @@
 export function AuthBackground() {
   return (
     <>
-      <picture>
-        <source srcSet="/images/Fondo_Destop_Negro.png" media="(prefers-color-scheme: dark)" />
+      <div className="hidden md:block absolute inset-0">
         <img
           src="/images/Fondo_Destop_Blanco.png"
           alt=""
-          className="hidden md:block absolute inset-0 size-full object-cover"
+          className="size-full object-cover dark:hidden"
         />
-      </picture>
-      <picture>
-        <source srcSet="/images/Fondo_Telefono_Negro.png" media="(prefers-color-scheme: dark)" />
+        <img
+          src="/images/Fondo_Destop_Negro.png"
+          alt=""
+          className="hidden dark:block size-full object-cover"
+        />
+      </div>
+      <div className="block md:hidden absolute inset-0">
         <img
           src="/images/Fondo_Telefono_Blanco.png"
           alt=""
-          className="block md:hidden absolute inset-0 size-full object-cover"
+          className="size-full object-cover dark:hidden"
         />
-      </picture>
+        <img
+          src="/images/Fondo_Telefono_Negro.png"
+          alt=""
+          className="hidden dark:block size-full object-cover"
+        />
+      </div>
     </>
   )
 }

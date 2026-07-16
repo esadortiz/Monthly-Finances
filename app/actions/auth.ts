@@ -149,11 +149,11 @@ export async function logout() {
 
 function traducirError(mensaje: string): string {
   const errores: Record<string, string> = {
-    "Invalid login credentials": "Correo o contraseña incorrectos",
-    "User already registered": "Ya existe una cuenta con este correo",
-    "Email not confirmed": "Debes confirmar tu correo antes de iniciar sesión",
-    "Password should be at least 6 characters": "La contraseña debe tener al menos 6 caracteres",
-    "Email rate limit exceeded": "Demasiados intentos con este correo. Espera una hora e intenta de nuevo.",
+    "invalid login credentials": "Correo o contraseña incorrectos",
+    "user already registered": "Ya existe una cuenta con este correo",
+    "email not confirmed": "Debes confirmar tu correo antes de iniciar sesión",
+    "password should be at least 6 characters": "La contraseña debe tener al menos 6 caracteres",
+    "email rate limit exceeded": "Demasiados intentos con este correo. Espera una hora e intenta de nuevo.",
   }
-  return errores[mensaje] ?? mensaje
+  return errores[mensaje.toLowerCase()] ?? mensaje
 }

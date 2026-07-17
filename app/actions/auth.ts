@@ -110,12 +110,7 @@ export async function signup(formData: FormData) {
     redirect(`/register?error=${encodeURIComponent(traducirError((error as any)?.message))}`)
   }
 
-  if (data?.session) {
-    revalidatePath("/", "layout")
-    redirect("/dashboard")
-  }
-
-  redirect(`/auth/verify-otp?email=${encodeURIComponent(parsed.data.email)}`)
+  redirect("/login?registrado=true")
 }
 
 export async function recuperarContrasena(formData: FormData) {

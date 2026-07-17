@@ -76,9 +76,9 @@ export async function signup(formData: FormData) {
 
   const supabase = await createClient()
 
-  let signupError: any = null
+  let signupResponse: Awaited<ReturnType<typeof supabase.auth.signUp>> | null = null
   try {
-    const { error } = await supabase.auth.signUp({
+    signupResponse = await supabase.auth.signUp({
       email: parsed.data.email,
       password: parsed.data.password,
       options: {
@@ -89,17 +89,22 @@ export async function signup(formData: FormData) {
         emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/confirm`,
       },
     })
-    signupError = error
   } catch (e) {
     console.error("Signup call error:", e)
     redirect(`/register?error=${encodeURIComponent("Error de conexión con Supabase")}`)
   }
 
-  if (signupError) {
-    console.error("Signup Supabase error object:", JSON.stringify(signupError))
-    console.error("Signup Supabase error name:", (signupError as any)?.name)
-    console.error("Signup Supabase error message:", (signupError as any)?.message)
-    redirect(`/register?error=${encodeURIComponent(traducirError((signupError as any)?.message))}`)
+  const { error, data } = signupResponse!
+
+  if (error) {
+    console.error("Signup Supabase error object:", JSON.stringify(error))
+    console.error("Signup Supabase error message:", (error as any)?.message)
+    redirect(`/register?error=${encodeURIComponent(traducirError((error as any)?.message))}`)
+  }
+
+  if (data?.session) {
+    revalidatePath("/", "layout")
+    redirect("/dashboard")
   }
 
   redirect(`/auth/verify-otp?email=${encodeURIComponent(parsed.data.email)}`)

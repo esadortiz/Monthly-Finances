@@ -97,8 +97,16 @@ export async function signup(formData: FormData) {
   const { error, data } = signupResponse!
 
   if (error) {
-    console.error("Signup Supabase error object:", JSON.stringify(error))
-    console.error("Signup Supabase error message:", (error as any)?.message)
+    console.error("=== SUPABASE SIGNUP ERROR DEBUG ===")
+    console.error("typeof error:", typeof error)
+    console.error("error keys:", Object.keys(error))
+    console.error("error.constructor.name:", (error as any)?.constructor?.name)
+    console.error("error.message:", (error as any)?.message)
+    console.error("error.name:", (error as any)?.name)
+    console.error("error.code:", (error as any)?.code)
+    console.error("error.status:", (error as any)?.status)
+    console.error("JSON.stringify:", JSON.stringify(error))
+    console.error("===================================")
     redirect(`/register?error=${encodeURIComponent(traducirError((error as any)?.message))}`)
   }
 

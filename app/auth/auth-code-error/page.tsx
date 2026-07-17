@@ -1,15 +1,22 @@
 import Link from 'next/link'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 
-export default function AuthCodeErrorPage() {
+export default async function AuthCodeErrorPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ error?: string }>
+}) {
+  const { error } = await searchParams
+
   return (
     <div className="flex min-h-screen items-center justify-center p-4">
       <Card className="w-full max-w-sm text-center">
         <CardHeader>
           <CardTitle className="text-2xl">Link inválido o expirado</CardTitle>
           <CardDescription>
-            Este link de confirmación ya no es válido. Intenta registrarte de
-            nuevo o inicia sesión si ya confirmaste tu cuenta antes.
+            {error
+              ? `Error: ${error}`
+              : 'Este link de confirmación ya no es válido. Intenta registrarte de nuevo o inicia sesión si ya confirmaste tu cuenta antes.'}
           </CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col gap-2">

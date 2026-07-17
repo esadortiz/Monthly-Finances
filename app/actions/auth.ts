@@ -107,7 +107,7 @@ export async function signup(formData: FormData) {
     redirect("/dashboard")
   }
 
-  redirect(`/auth/verify-otp?email=${encodeURIComponent(parsed.data.email)}`)
+  redirect("/login?registrado=true")
 }
 
 export async function recuperarContrasena(formData: FormData) {

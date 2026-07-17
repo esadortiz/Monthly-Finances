@@ -8,7 +8,7 @@ export default function RegisterPage() {
     <div className="relative flex min-h-screen flex-col items-center justify-center p-4 overflow-hidden bg-background text-black">
       <AuthBackground />
       <div className="relative z-10 mb-8">
-        <Logo href="/" variant="dark" />
+        <Logo href="/" variant="normal" />
       </div>
       <Suspense fallback={null}>
         <RegisterForm />

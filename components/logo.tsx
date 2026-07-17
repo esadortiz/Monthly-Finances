@@ -25,7 +25,7 @@ export function Logo({ size = "sm", href, variant = "normal" }: { size?: "sm" | 
         width={dims}
         height={dims}
       />
-      <span className={`font-semibold ${size === "lg" ? "text-base" : "text-sm"}`}>Monthly Finances</span>
+      <span className={`font-semibold text-black dark:text-white ${size === "lg" ? "text-base" : "text-sm"}`}>Monthly Finances</span>
     </div>
   )
 

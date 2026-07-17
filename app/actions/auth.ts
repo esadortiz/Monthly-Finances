@@ -53,29 +53,31 @@ export async function login(formData: FormData) {
 }
 
 export async function signup(formData: FormData) {
+  const email = formData.get("email") as string
+  const password = formData.get("password") as string
+  const confirmPassword = formData.get("confirmPassword") as string
+  const nombre = formData.get("nombre") as string
+  const apellido = formData.get("apellido") as string
+
+  const ip = "global"
+  const rateCheck = checkRateLimit(`signup:${email}`, 3, 15 * 60 * 1000)
+  if (!rateCheck.allowed) {
+    const minutos = Math.ceil(rateCheck.resetIn / 60000)
+    redirect(
+      `/register?error=${encodeURIComponent(`Demasiados intentos. Intenta de nuevo en ${minutos} minutos.`)}`
+    )
+  }
+
+  const parsed = signupSchema.safeParse({ email, password, confirmPassword, nombre, apellido })
+  if (!parsed.success) {
+    const error = parsed.error.issues[0]?.message || "Datos inválidos"
+    redirect(`/register?error=${encodeURIComponent(error)}`)
+  }
+
+  const supabase = await createClient()
+
+  let signupError: any = null
   try {
-    const email = formData.get("email") as string
-    const password = formData.get("password") as string
-    const confirmPassword = formData.get("confirmPassword") as string
-    const nombre = formData.get("nombre") as string
-    const apellido = formData.get("apellido") as string
-
-    const ip = "global"
-    const rateCheck = checkRateLimit(`signup:${email}`, 3, 15 * 60 * 1000)
-    if (!rateCheck.allowed) {
-      const minutos = Math.ceil(rateCheck.resetIn / 60000)
-      redirect(
-        `/register?error=${encodeURIComponent(`Demasiados intentos. Intenta de nuevo en ${minutos} minutos.`)}`
-      )
-    }
-
-    const parsed = signupSchema.safeParse({ email, password, confirmPassword, nombre, apellido })
-    if (!parsed.success) {
-      const error = parsed.error.issues[0]?.message || "Datos inválidos"
-      redirect(`/register?error=${encodeURIComponent(error)}`)
-    }
-
-    const supabase = await createClient()
     const { error } = await supabase.auth.signUp({
       email: parsed.data.email,
       password: parsed.data.password,
@@ -87,18 +89,18 @@ export async function signup(formData: FormData) {
         emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/confirm`,
       },
     })
-
-    if (error) {
-      console.error("Signup Supabase error:", error)
-      redirect(`/register?error=${encodeURIComponent(traducirError(error.message))}`)
-    }
-
-    redirect("/register/revisa-tu-correo")
+    signupError = error
   } catch (e) {
-    console.error("Signup unexpected error:", e)
-    const msg = e instanceof Error ? e.message : "Error inesperado"
-    redirect(`/register?error=${encodeURIComponent(msg)}`)
+    console.error("Signup call error:", e)
+    redirect(`/register?error=${encodeURIComponent("Error de conexión con Supabase")}`)
   }
+
+  if (signupError) {
+    console.error("Signup Supabase error:", signupError)
+    redirect(`/register?error=${encodeURIComponent(traducirError(signupError.message))}`)
+  }
+
+  redirect("/register/revisa-tu-correo")
 }
 
 export async function recuperarContrasena(formData: FormData) {

@@ -12,7 +12,8 @@ function ConfirmHandler() {
     const code = searchParams.get("code")
     const token_hash = searchParams.get("token_hash")
     const type = searchParams.get("type")
-    const next = searchParams.get("next") ?? "/dashboard"
+    const nextParam = searchParams.get("next")
+    const next = type === "recovery" ? "/auth/update-password" : (nextParam ?? "/dashboard")
 
     async function handleConfirm() {
       const supabase = createClient()

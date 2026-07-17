@@ -100,7 +100,7 @@ export async function signup(formData: FormData) {
     redirect(`/register?error=${encodeURIComponent(traducirError(signupError.message))}`)
   }
 
-  redirect("/register/revisa-tu-correo")
+  redirect(`/auth/verify-otp?email=${encodeURIComponent(parsed.data.email)}`)
 }
 
 export async function recuperarContrasena(formData: FormData) {

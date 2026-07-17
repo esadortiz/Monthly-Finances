@@ -96,8 +96,10 @@ export async function signup(formData: FormData) {
   }
 
   if (signupError) {
-    console.error("Signup Supabase error:", signupError)
-    redirect(`/register?error=${encodeURIComponent(traducirError(signupError.message))}`)
+    console.error("Signup Supabase error object:", JSON.stringify(signupError))
+    console.error("Signup Supabase error name:", (signupError as any)?.name)
+    console.error("Signup Supabase error message:", (signupError as any)?.message)
+    redirect(`/register?error=${encodeURIComponent(traducirError((signupError as any)?.message))}`)
   }
 
   redirect(`/auth/verify-otp?email=${encodeURIComponent(parsed.data.email)}`)
@@ -158,6 +160,10 @@ export async function logout() {
 
 function traducirError(mensaje: string): string {
   if (!mensaje) return "Error inesperado. Intenta de nuevo."
+  if (mensaje === "{}" || mensaje === "[]" || mensaje === "[object Object]") {
+    return "Ocurrió un error al crear la cuenta. Inténtalo nuevamente."
+  }
+  const limpio = mensaje.replace(/^["'\s]+|["'\s]+$/g, "")
   const errores: Record<string, string> = {
     "invalid login credentials": "Correo o contraseña incorrectos",
     "user already registered": "Ya existe una cuenta con este correo",
@@ -165,5 +171,5 @@ function traducirError(mensaje: string): string {
     "password should be at least 6 characters": "La contraseña debe tener al menos 6 caracteres",
     "email rate limit exceeded": "Demasiados intentos con este correo. Espera una hora e intenta de nuevo.",
   }
-  return errores[mensaje.toLowerCase()] ?? mensaje
+  return errores[limpio.toLowerCase()] ?? limpio
 }

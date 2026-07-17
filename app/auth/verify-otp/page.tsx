@@ -59,9 +59,13 @@ function VerifyOtpForm() {
     })
 
     if (verifyError) {
-      const msg = verifyError.message === "Token has expired or is invalid"
+      console.error("verifyOtp error:", JSON.stringify(verifyError))
+      const m = verifyError.message
+      const msg = !m || m === "{}" || m === "[]"
+        ? "Ocurrió un error al verificar el código. Inténtalo nuevamente."
+        : m === "Token has expired or is invalid"
         ? "El código expiró o es inválido. Solicita uno nuevo."
-        : verifyError.message
+        : m
       setError(msg)
       setLoading(false)
       return
@@ -80,7 +84,8 @@ function VerifyOtpForm() {
       options: { emailRedirectTo: `${window.location.origin}/auth/confirm` },
     })
     if (resendError) {
-      setError(resendError.message)
+      const m = resendError.message
+      setError(!m || m === "{}" || m === "[]" ? "Ocurrió un error al reenviar. Inténtalo nuevamente." : m)
     }
     setLoading(false)
   }

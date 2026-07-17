@@ -88,6 +88,7 @@ export async function signup(formData: FormData) {
   })
 
   if (error) {
+    console.error("Signup Supabase error:", error)
     redirect(`/register?error=${encodeURIComponent(traducirError(error.message))}`)
   }
 
@@ -148,6 +149,7 @@ export async function logout() {
 }
 
 function traducirError(mensaje: string): string {
+  if (!mensaje) return "Error inesperado. Intenta de nuevo."
   const errores: Record<string, string> = {
     "invalid login credentials": "Correo o contraseña incorrectos",
     "user already registered": "Ya existe una cuenta con este correo",

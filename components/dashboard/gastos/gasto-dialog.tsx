@@ -1,7 +1,7 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { Plus, Pencil, Receipt } from "lucide-react"
+import { useState } from "react"
+import { Plus, Pencil } from "lucide-react"
 import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import {
@@ -40,16 +40,7 @@ export function GastoDialog({
   triggerVariant = "default",
 }: GastoDialogProps) {
   const [open, setOpen] = useState(false)
-  const [comprobante, setComprobante] = useState(
-    gasto?.comprobante_url ?? ""
-  )
   const isEditing = !!gasto
-
-  useEffect(() => {
-    if (gasto) {
-      setComprobante(gasto.comprobante_url ?? "")
-    }
-  }, [gasto])
 
   async function handleSubmit(formData: FormData) {
     const catId = formData.get("categoria_id") as string
@@ -59,7 +50,6 @@ export function GastoDialog({
       valor: Number(formData.get("valor_raw")) || 0,
       descripcion: (formData.get("descripcion") as string) || null,
       metodo_pago: (formData.get("metodo_pago") as string) || null,
-      comprobante_url: (formData.get("comprobante_url") as string) || null,
     }
 
     if (input.valor <= 0) {
@@ -175,29 +165,6 @@ export function GastoDialog({
                 ]}
               />
             </div>
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="comprobante_url">URL del Comprobante (opcional)</Label>
-            <Input
-              id="comprobante_url"
-              name="comprobante_url"
-              type="url"
-              placeholder="https://..."
-              value={comprobante}
-              onChange={(e) => setComprobante(e.target.value)}
-            />
-            {comprobante && (
-              <a
-                href={comprobante}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 text-xs text-primary hover:underline"
-              >
-                <Receipt className="size-3" />
-                Ver comprobante
-              </a>
-            )}
           </div>
 
           <div className="flex justify-end gap-2 pt-2">

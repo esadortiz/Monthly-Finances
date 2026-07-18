@@ -42,7 +42,6 @@ export const gastoSchema = z.object({
   valor: z.number().min(0, "Valor debe ser positivo").max(999999999),
   descripcion: z.string().max(500).nullable().optional(),
   metodo_pago: z.enum(["efectivo", "tarjeta_debito", "tarjeta_credito", "transferencia", "otro"]).nullable().optional(),
-  comprobante_url: z.string().url("URL inválida").max(2048).nullable().optional(),
 })
 
 export const metaSchema = z.object({

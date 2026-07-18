@@ -34,7 +34,6 @@ export async function crearGasto(input: Record<string, unknown>): Promise<Action
     valor: parsed.data.valor,
     descripcion: sanitizeOptional(parsed.data.descripcion),
     metodo_pago: parsed.data.metodo_pago || null,
-    comprobante_url: parsed.data.comprobante_url || null,
   })
 
   if (error) {
@@ -65,7 +64,6 @@ export async function actualizarGasto(
       valor: parsed.data.valor,
       descripcion: sanitizeOptional(parsed.data.descripcion),
       metodo_pago: parsed.data.metodo_pago || null,
-      comprobante_url: parsed.data.comprobante_url || null,
       actualizado_en: new Date().toISOString(),
     })
     .eq("id", id)

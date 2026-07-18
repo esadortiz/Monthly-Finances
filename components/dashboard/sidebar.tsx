@@ -14,7 +14,6 @@ import {
   CreditCard,
   Bell,
   BarChart3,
-  Upload,
   UserCircle,
   LogOut,
   Menu,
@@ -36,7 +35,6 @@ const navItems = [
   { href: "/dashboard/deudas", label: "Deudas", icon: CreditCard },
   { href: "/dashboard/recordatorios", label: "Recordatorios", icon: Bell },
   { href: "/dashboard/analisis", label: "Análisis", icon: BarChart3 },
-  { href: "/dashboard/importar", label: "Importar", icon: Upload },
   { href: "/dashboard/configuracion", label: "Perfil", icon: UserCircle },
 ]
 

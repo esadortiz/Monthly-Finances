@@ -105,15 +105,6 @@ export const cambiarPasswordSchema = z.object({
   password_nueva: z.string().min(6, "Mínimo 6 caracteres").max(128),
 })
 
-export const importarFilaSchema = z.object({
-  fecha: z.string().min(1),
-  descripcion: z.string().max(500).nullable().optional(),
-  valor: z.number(),
-  categoria_nombre: z.string().max(100).nullable().optional(),
-  cuenta_nombre: z.string().max(100).nullable().optional(),
-  metodo_pago: z.string().max(50).nullable().optional(),
-})
-
 export type CategoriaInput = z.infer<typeof categoriaSchema>
 export type CuentaInput = z.infer<typeof cuentaSchema>
 export type IngresoInput = z.infer<typeof ingresoBaseSchema>

@@ -10,7 +10,6 @@ export type AccionAuditable =
   | "actualizar"
   | "eliminar"
   | "exportar"
-  | "importar"
 
 export async function registrarAuditoria(
   usuarioId: string,

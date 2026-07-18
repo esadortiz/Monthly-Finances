@@ -16,7 +16,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { crearGasto, actualizarGasto } from "@/app/actions/gastos"
-import type { Cuenta, Categoria, Gasto } from "@/types/database"
+import type { Categoria, Gasto } from "@/types/database"
 import { LabeledSelect } from "@/components/dashboard/labeled-select"
 import { CurrencyInput } from "@/components/dashboard/currency-input"
 
@@ -29,14 +29,12 @@ const metodosPago = [
 ]
 
 interface GastoDialogProps {
-  cuentas: Cuenta[]
   categorias: Categoria[]
   gasto?: Gasto
   triggerVariant?: "default" | "ghost"
 }
 
 export function GastoDialog({
-  cuentas,
   categorias,
   gasto,
   triggerVariant = "default",
@@ -56,7 +54,6 @@ export function GastoDialog({
   async function handleSubmit(formData: FormData) {
     const catId = formData.get("categoria_id") as string
     const input = {
-      cuenta_id: formData.get("cuenta_id") as string,
       categoria_id: catId && catId !== "none" ? catId : null,
       fecha: formData.get("fecha") as string,
       valor: Number(formData.get("valor_raw")) || 0,
@@ -178,20 +175,6 @@ export function GastoDialog({
                 ]}
               />
             </div>
-          </div>
-
-          <div className="space-y-2">
-            <Label>Cuenta</Label>
-            <LabeledSelect
-              name="cuenta_id"
-              defaultValue={gasto?.cuenta_id ?? cuentas[0]?.id}
-              placeholder="Selecciona una cuenta"
-              required
-              options={cuentas.map((c) => ({
-                value: c.id,
-                label: c.nombre,
-              }))}
-            />
           </div>
 
           <div className="space-y-2">

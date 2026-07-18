@@ -16,7 +16,7 @@ import { DeleteGastoButton } from "@/components/dashboard/gastos/delete-gasto-bu
 import { GastosFilters } from "@/components/dashboard/gastos/gastos-filters"
 import { ExportButton } from "@/components/dashboard/export-button"
 import { exportarGastos } from "@/app/actions/exportar"
-import type { Cuenta, Categoria, Gasto } from "@/types/database"
+import type { Categoria, Gasto } from "@/types/database"
 
 const metodosPagoLabels: Record<string, string> = {
   efectivo: "Efectivo",
@@ -33,7 +33,6 @@ export default async function GastosPage({
     error?: string
     q?: string
     categoria?: string
-    cuenta?: string
     metodo?: string
     desde?: string
     hasta?: string
@@ -48,13 +47,8 @@ export default async function GastosPage({
     redirect("/login")
   }
 
-  const [{ data: cuentas }, { data: categorias }, { data: gastos }] =
+  const [{ data: categorias }, { data: gastos }] =
     await Promise.all([
-      supabase
-        .from("cuentas")
-        .select("*")
-        .eq("usuario_id", user.id)
-        .order("nombre"),
       supabase
         .from("categorias")
         .select("*")
@@ -67,11 +61,9 @@ export default async function GastosPage({
         .order("fecha", { ascending: false }),
     ])
 
-  const cuentasList = (cuentas ?? []) as Cuenta[]
   const categoriasList = (categorias ?? []) as Categoria[]
   const gastosList = (gastos ?? []) as Gasto[]
 
-  const cuentaMap = new Map(cuentasList.map((c) => [c.id, c]))
   const categoriaMap = new Map(categoriasList.map((c) => [c.id, c]))
 
   const params = await searchParams
@@ -88,12 +80,6 @@ export default async function GastosPage({
   if (params.categoria && params.categoria !== "all") {
     gastosFiltrados = gastosFiltrados.filter(
       (g) => g.categoria_id === params.categoria
-    )
-  }
-
-  if (params.cuenta && params.cuenta !== "all") {
-    gastosFiltrados = gastosFiltrados.filter(
-      (g) => g.cuenta_id === params.cuenta
     )
   }
 
@@ -123,12 +109,10 @@ export default async function GastosPage({
             {gastosList.length} registros
           </p>
         </div>
-        {cuentasList.length > 0 && (
           <div className="flex items-center gap-2 flex-wrap">
             <ExportButton action={exportarGastos} fileName="gastos.csv" />
-            <GastoDialog cuentas={cuentasList} categorias={categoriasList} />
+            <GastoDialog categorias={categoriasList} />
           </div>
-        )}
       </div>
 
       <Card>
@@ -141,7 +125,7 @@ export default async function GastosPage({
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <GastosFilters cuentas={cuentasList} categorias={categoriasList} />
+          <GastosFilters categorias={categoriasList} />
 
           {gastosFiltrados.length === 0 ? (
             <div className="flex h-[200px] items-center justify-center text-sm text-muted-foreground">
@@ -157,14 +141,12 @@ export default async function GastosPage({
                   <TableHead className="hidden sm:table-cell">Descripción</TableHead>
                   <TableHead className="hidden md:table-cell">Categoría</TableHead>
                   <TableHead className="hidden md:table-cell">Método</TableHead>
-                  <TableHead className="hidden lg:table-cell">Cuenta</TableHead>
                   <TableHead className="text-right">Valor</TableHead>
                   <TableHead className="w-[70px]"></TableHead>
                 </TableRow>
               </TableHeader>
               <StaggerRows>
                 {gastosFiltrados.map((gasto) => {
-                  const cuenta = cuentaMap.get(gasto.cuenta_id)
                   const categoria = gasto.categoria_id
                     ? categoriaMap.get(gasto.categoria_id)
                     : null
@@ -225,9 +207,6 @@ export default async function GastosPage({
                             gasto.metodo_pago
                           : "—"}
                       </TableCell>
-                      <TableCell className="hidden lg:table-cell p-1.5 sm:p-2 text-sm">
-                        {cuenta?.nombre ?? "—"}
-                      </TableCell>
                       <TableCell className="p-1.5 sm:p-2 text-right font-medium text-red-600 tabular-nums whitespace-nowrap">
                         <span className="sm:hidden">$</span>
                         <span className="hidden sm:inline">-$</span>
@@ -236,7 +215,6 @@ export default async function GastosPage({
                       <TableCell className="p-1.5 sm:p-2">
                         <div className="flex items-center gap-0.5 sm:gap-1">
                           <GastoDialog
-                            cuentas={cuentasList}
                             categorias={categoriasList}
                             gasto={gasto}
                             triggerVariant="ghost"

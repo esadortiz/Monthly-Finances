@@ -29,7 +29,6 @@ export async function crearGasto(input: Record<string, unknown>): Promise<Action
 
   const { error } = await supabase.from("gastos").insert({
     usuario_id: user.id,
-    cuenta_id: parsed.data.cuenta_id,
     categoria_id: parsed.data.categoria_id || null,
     fecha: parsed.data.fecha,
     valor: parsed.data.valor,
@@ -61,7 +60,6 @@ export async function actualizarGasto(
   const { error } = await supabase
     .from("gastos")
     .update({
-      cuenta_id: parsed.data.cuenta_id,
       categoria_id: parsed.data.categoria_id || null,
       fecha: parsed.data.fecha,
       valor: parsed.data.valor,

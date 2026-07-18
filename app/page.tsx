@@ -31,8 +31,8 @@ export default function Home() {
             Controla tus finanzas personales
           </h1>
           <p className="mt-4 text-lg text-muted-foreground">
-            Registra ingresos y gastos, administra cuentas, crea presupuestos y
-            visualiza estadísticas claras para tomar mejores decisiones
+            Registra ingresos y gastos, crea presupuestos y visualiza
+            estadísticas claras para tomar mejores decisiones
             financieras.
           </p>
           <div className="mt-8 flex items-center justify-center gap-4">

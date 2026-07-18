@@ -5,7 +5,6 @@ import { usePathname } from "next/navigation"
 import { motion, AnimatePresence } from "motion/react"
 import {
   LayoutDashboard,
-  Wallet,
   TrendingUp,
   TrendingDown,
   Tags,
@@ -28,7 +27,6 @@ const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/dashboard/ingresos", label: "Ingresos", icon: TrendingUp },
   { href: "/dashboard/gastos", label: "Gastos", icon: TrendingDown },
-  { href: "/dashboard/cuentas", label: "Cuentas", icon: Wallet },
   { href: "/dashboard/categorias", label: "Categorías", icon: Tags },
   { href: "/dashboard/presupuestos", label: "Presupuestos", icon: PiggyBank },
   { href: "/dashboard/metas", label: "Metas", icon: Target },

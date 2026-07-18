@@ -1,13 +1,13 @@
 import { redirect } from "next/navigation"
 import { createClient } from "@/lib/supabase/server"
 import { StatsCard } from "@/components/dashboard/stats-card"
+import { ExportButton } from "@/components/dashboard/export-button"
 import { OverviewChart } from "@/components/dashboard/overview-chart"
 import { RecentTransactions } from "@/components/dashboard/recent-transactions"
 import { BudgetOverview } from "@/components/dashboard/budget-overview"
 import { BudgetAlerts } from "@/components/dashboard/budget-alerts"
 import { SavingsOverview } from "@/components/dashboard/savings-overview"
 import { RemindersCard } from "@/components/dashboard/reminders-card"
-import { ExportButton } from "@/components/dashboard/export-button"
 import { exportarMovimientos } from "@/app/actions/exportar"
 import type { Movimiento } from "@/types/database"
 
@@ -29,9 +29,8 @@ export default async function DashboardPage() {
   const mesActual = ahora.getMonth()
   const anioActual = ahora.getFullYear()
 
-  const [cuentasRes, categoriasRes, ingresosRes, gastosRes, presupuestosRes, metasRes, deudasRes, recordatoriosRes] =
+  const [categoriasRes, ingresosRes, gastosRes, presupuestosRes, metasRes, deudasRes, recordatoriosRes] =
     await Promise.all([
-      supabase.from("cuentas").select("*").eq("usuario_id", user.id).order("nombre"),
       supabase.from("categorias").select("*").eq("usuario_id", user.id).order("nombre"),
       supabase.from("ingresos").select("*").eq("usuario_id", user.id).order("fecha", { ascending: false }),
       supabase.from("gastos").select("*").eq("usuario_id", user.id).order("fecha", { ascending: false }),
@@ -41,7 +40,6 @@ export default async function DashboardPage() {
       supabase.from("recordatorios").select("*").eq("usuario_id", user.id).not("completado", "eq", true).order("fecha_recordatorio", { ascending: true }).limit(5),
     ])
 
-  const cuentas = cuentasRes.data ?? []
   const categorias = categoriasRes.data ?? []
   const ingresos = ingresosRes.data ?? []
   const gastos = gastosRes.data ?? []
@@ -49,8 +47,6 @@ export default async function DashboardPage() {
   const metas = metasRes.data ?? []
   const deudas = deudasRes.data ?? []
   const recordatorios = recordatoriosRes.data ?? []
-
-  const saldo_disponible = cuentas.reduce((sum, c) => sum + Number(c.saldo_actual), 0)
 
   const ingresos_mes = ingresos
     .filter((i) => {
@@ -117,7 +113,6 @@ export default async function DashboardPage() {
 
   // Transacciones recientes
   const categoriaMap = new Map(categorias.map((c) => [c.id, c]))
-  const cuentaMap = new Map(cuentas.map((c) => [c.id, c]))
 
   const todosMovimientos: Movimiento[] = [
     ...ingresos.map((i) => ({
@@ -128,7 +123,6 @@ export default async function DashboardPage() {
       fecha: i.fecha,
       categoria_nombre: i.categoria_id ? categoriaMap.get(i.categoria_id)?.nombre ?? null : null,
       categoria_color: i.categoria_id ? categoriaMap.get(i.categoria_id)?.color ?? null : null,
-      cuenta_nombre: cuentaMap.get(i.cuenta_id)?.nombre ?? "Cuenta",
     })),
     ...gastos.map((g) => ({
       id: g.id,
@@ -138,7 +132,6 @@ export default async function DashboardPage() {
       fecha: g.fecha,
       categoria_nombre: g.categoria_id ? categoriaMap.get(g.categoria_id)?.nombre ?? null : null,
       categoria_color: g.categoria_id ? categoriaMap.get(g.categoria_id)?.color ?? null : null,
-      cuenta_nombre: cuentaMap.get(g.cuenta_id)?.nombre ?? "Cuenta",
     })),
   ]
     .sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime())
@@ -164,7 +157,6 @@ export default async function DashboardPage() {
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        <StatsCard title="Saldo Disponible" value={formatear(saldo_disponible)} icon="Wallet" iconClassName="bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400" />
         <StatsCard title="Ingresos del Mes" value={formatear(ingresos_mes)} icon="TrendingUp" iconClassName="bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400" />
         <StatsCard title="Gastos del Mes" value={formatear(gastos_mes)} icon="TrendingDown" iconClassName="bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400" />
         <StatsCard title="Balance" value={formatear(ingresos_mes - gastos_mes)} icon="RefreshCcw" iconClassName={ingresos_mes - gastos_mes >= 0 ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400" : "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"} />

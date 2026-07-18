@@ -53,8 +53,7 @@ export function RecentTransactions({ movimientos }: RecentTransactionsProps) {
                   {m.descripcion || m.categoria_nombre || "Sin descripción"}
                 </span>
                 <span className="text-xs text-muted-foreground">
-                  {m.categoria_nombre && `${m.categoria_nombre} · `}
-                  {m.cuenta_nombre}
+                  {m.categoria_nombre || ""}
                 </span>
               </div>
               <div className="text-right">

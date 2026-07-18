@@ -12,21 +12,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import type { Cuenta, Categoria } from "@/types/database"
+import type { Categoria } from "@/types/database"
 
 interface IngresosFiltersProps {
-  cuentas: Cuenta[]
   categorias: Categoria[]
 }
 
-export function IngresosFilters({ cuentas, categorias }: IngresosFiltersProps) {
+export function IngresosFilters({ categorias }: IngresosFiltersProps) {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [isPending, startTransition] = useTransition()
 
   const [q, setQ] = useState(searchParams.get("q") ?? "")
   const categoriaId = searchParams.get("categoria") ?? "all"
-  const cuentaId = searchParams.get("cuenta") ?? "all"
   const [desde, setDesde] = useState(searchParams.get("desde") ?? "")
   const [hasta, setHasta] = useState(searchParams.get("hasta") ?? "")
 
@@ -43,10 +41,6 @@ export function IngresosFilters({ cuentas, categorias }: IngresosFiltersProps) {
   const categoriaLabelMap = new Map([
     ["all", "Todas las categorías"],
     ...categoriasIngreso.map((c) => [c.id, c.nombre] as const),
-  ])
-  const cuentaLabelMap = new Map([
-    ["all", "Todas las cuentas"],
-    ...cuentas.map((c) => [c.id, c.nombre] as const),
   ])
 
   const updateFilter = useCallback(
@@ -87,7 +81,6 @@ export function IngresosFilters({ cuentas, categorias }: IngresosFiltersProps) {
   const hasFilters =
     q !== "" ||
     categoriaId !== "all" ||
-    cuentaId !== "all" ||
     desde !== "" ||
     hasta !== ""
 
@@ -138,27 +131,6 @@ export function IngresosFilters({ cuentas, categorias }: IngresosFiltersProps) {
                   style={{ backgroundColor: cat.color }}
                 />
                 {cat.nombre}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-
-        <Select
-          value={cuentaId}
-          onValueChange={(v) => v && updateFilter("cuenta", v)}
-        >
-          <SelectTrigger className="w-full sm:w-[180px]">
-            <SelectValue placeholder="Cuenta">
-              {(value: string) => (
-                <span>{cuentaLabelMap.get(value) ?? "Todas las cuentas"}</span>
-              )}
-            </SelectValue>
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">Todas las cuentas</SelectItem>
-            {cuentas.map((cuenta) => (
-              <SelectItem key={cuenta.id} value={cuenta.id}>
-                {cuenta.nombre}
               </SelectItem>
             ))}
           </SelectContent>

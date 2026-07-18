@@ -1,14 +1,3 @@
-export interface Cuenta {
-  id: string
-  usuario_id: string
-  nombre: string
-  tipo: 'banco' | 'billetera_digital' | 'efectivo' | 'ahorros' | 'otro'
-  saldo_inicial: number
-  saldo_actual: number
-  creado_en: string
-  actualizado_en: string
-}
-
 export interface Categoria {
   id: string
   usuario_id: string
@@ -22,7 +11,6 @@ export interface Categoria {
 export interface Ingreso {
   id: string
   usuario_id: string
-  cuenta_id: string
   categoria_id: string | null
   fecha: string
   valor: number
@@ -34,7 +22,6 @@ export interface Ingreso {
 export interface Gasto {
   id: string
   usuario_id: string
-  cuenta_id: string
   categoria_id: string | null
   fecha: string
   metodo_pago: string | null
@@ -46,11 +33,9 @@ export interface Gasto {
 }
 
 export interface DashboardData {
-  saldo_disponible: number
   ingresos_mes: number
   gastos_mes: number
   balance: number
-  cuentas: Cuenta[]
   ultimos_movimientos: Movimiento[]
   gastos_por_categoria: { categoria: string; total: number; color: string }[]
   ingresos_recientes: { fecha: string; total: number }[]
@@ -122,5 +107,4 @@ export interface Movimiento {
   fecha: string
   categoria_nombre: string | null
   categoria_color: string | null
-  cuenta_nombre: string
 }

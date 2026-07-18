@@ -17,19 +17,17 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { crearIngreso, actualizarIngreso } from "@/app/actions/ingresos"
 import type { IngresoInput } from "@/lib/validation/schemas"
-import type { Cuenta, Categoria, Ingreso } from "@/types/database"
+import type { Categoria, Ingreso } from "@/types/database"
 import { LabeledSelect } from "@/components/dashboard/labeled-select"
 import { CurrencyInput } from "@/components/dashboard/currency-input"
 
 interface IngresoDialogProps {
-  cuentas: Cuenta[]
   categorias: Categoria[]
   ingreso?: Ingreso
   triggerVariant?: "default" | "ghost"
 }
 
 export function IngresoDialog({
-  cuentas,
   categorias,
   ingreso,
   triggerVariant = "default",
@@ -38,7 +36,6 @@ export function IngresoDialog({
   const isEditing = !!ingreso
 
   const [formData, setFormData] = useState<IngresoInput>({
-    cuenta_id: ingreso?.cuenta_id ?? cuentas[0]?.id ?? "",
     categoria_id: ingreso?.categoria_id ?? "",
     fecha: ingreso?.fecha ?? new Date().toISOString().split("T")[0],
     valor: ingreso?.valor ?? 0,
@@ -48,7 +45,6 @@ export function IngresoDialog({
   useEffect(() => {
     if (ingreso) {
       setFormData({
-        cuenta_id: ingreso.cuenta_id,
         categoria_id: ingreso.categoria_id ?? "",
         fecha: ingreso.fecha,
         valor: ingreso.valor,
@@ -60,7 +56,6 @@ export function IngresoDialog({
   async function handleSubmit(formDataToSend: FormData) {
     const catId = formDataToSend.get("categoria_id") as string
     const input = {
-      cuenta_id: formDataToSend.get("cuenta_id") as string,
       categoria_id: catId && catId !== "none" ? catId : null,
       fecha: formDataToSend.get("fecha") as string,
       valor: Number(formDataToSend.get("valor_raw")) || 0,
@@ -162,20 +157,6 @@ export function IngresoDialog({
                 ]}
               />
             </div>
-          </div>
-
-          <div className="space-y-2">
-            <Label>Cuenta</Label>
-            <LabeledSelect
-              name="cuenta_id"
-              defaultValue={formData.cuenta_id}
-              placeholder="Selecciona una cuenta"
-              required
-              options={cuentas.map((c) => ({
-                value: c.id,
-                label: c.nombre,
-              }))}
-            />
           </div>
 
           <div className="flex justify-end gap-2 pt-2">

@@ -12,10 +12,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import type { Cuenta, Categoria } from "@/types/database"
+import type { Categoria } from "@/types/database"
 
 interface GastosFiltersProps {
-  cuentas: Cuenta[]
   categorias: Categoria[]
 }
 
@@ -27,14 +26,13 @@ const metodosPago = [
   { value: "otro", label: "Otro" },
 ]
 
-export function GastosFilters({ cuentas, categorias }: GastosFiltersProps) {
+export function GastosFilters({ categorias }: GastosFiltersProps) {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [isPending, startTransition] = useTransition()
 
   const [q, setQ] = useState(searchParams.get("q") ?? "")
   const categoriaId = searchParams.get("categoria") ?? "all"
-  const cuentaId = searchParams.get("cuenta") ?? "all"
   const metodoId = searchParams.get("metodo") ?? "all"
   const [desde, setDesde] = useState(searchParams.get("desde") ?? "")
   const [hasta, setHasta] = useState(searchParams.get("hasta") ?? "")
@@ -50,10 +48,6 @@ export function GastosFilters({ cuentas, categorias }: GastosFiltersProps) {
   const categoriaLabelMap = new Map([
     ["all", "Todas las categorías"],
     ...categoriasGasto.map((c) => [c.id, c.nombre] as const),
-  ])
-  const cuentaLabelMap = new Map([
-    ["all", "Todas las cuentas"],
-    ...cuentas.map((c) => [c.id, c.nombre] as const),
   ])
   const metodoLabelMap = new Map([
     ["all", "Todos los métodos"],
@@ -97,7 +91,6 @@ export function GastosFilters({ cuentas, categorias }: GastosFiltersProps) {
   const hasFilters =
     q !== "" ||
     categoriaId !== "all" ||
-    cuentaId !== "all" ||
     metodoId !== "all" ||
     desde !== "" ||
     hasta !== ""
@@ -177,27 +170,6 @@ export function GastosFilters({ cuentas, categorias }: GastosFiltersProps) {
       </div>
 
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-        <Select
-          value={cuentaId}
-          onValueChange={(v) => v && updateFilter("cuenta", v)}
-        >
-          <SelectTrigger className="w-full sm:w-[180px]">
-            <SelectValue placeholder="Cuenta">
-              {(value: string) => (
-                <span>{cuentaLabelMap.get(value) ?? "Todas las cuentas"}</span>
-              )}
-            </SelectValue>
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">Todas las cuentas</SelectItem>
-            {cuentas.map((c) => (
-              <SelectItem key={c.id} value={c.id}>
-                {c.nombre}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-
         <div className="flex items-center gap-2">
           <span className="text-xs text-muted-foreground">Desde:</span>
           <Input

@@ -29,15 +29,7 @@ export const categoriaSchema = z.object({
   icono: z.string().max(50).default(""),
 })
 
-export const cuentaSchema = z.object({
-  nombre: z.string().min(1, "Nombre requerido").max(100),
-  tipo: z.enum(["banco", "billetera_digital", "efectivo", "ahorros", "otro"]),
-  saldo_inicial: z.number().min(-999999999).max(999999999),
-  saldo_actual: z.number().min(-999999999).max(999999999),
-})
-
 export const ingresoBaseSchema = z.object({
-  cuenta_id: z.string().uuid("Cuenta inválida"),
   categoria_id: z.string().uuid("Categoría inválida").nullable().optional(),
   fecha: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Fecha inválida (YYYY-MM-DD)"),
   valor: z.number().min(0, "Valor debe ser positivo").max(999999999),
@@ -45,7 +37,6 @@ export const ingresoBaseSchema = z.object({
 })
 
 export const gastoSchema = z.object({
-  cuenta_id: z.string().uuid("Cuenta inválida"),
   categoria_id: z.string().uuid("Categoría inválida").nullable().optional(),
   fecha: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Fecha inválida (YYYY-MM-DD)"),
   valor: z.number().min(0, "Valor debe ser positivo").max(999999999),
@@ -106,7 +97,6 @@ export const cambiarPasswordSchema = z.object({
 })
 
 export type CategoriaInput = z.infer<typeof categoriaSchema>
-export type CuentaInput = z.infer<typeof cuentaSchema>
 export type IngresoInput = z.infer<typeof ingresoBaseSchema>
 export type GastoInput = z.infer<typeof gastoSchema>
 export type MetaAhorroInput = z.infer<typeof metaSchema>

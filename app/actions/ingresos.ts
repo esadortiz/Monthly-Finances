@@ -29,7 +29,6 @@ export async function crearIngreso(input: Record<string, unknown>): Promise<Acti
 
   const { error } = await supabase.from("ingresos").insert({
     usuario_id: user.id,
-    cuenta_id: parsed.data.cuenta_id,
     categoria_id: parsed.data.categoria_id || null,
     fecha: parsed.data.fecha,
     valor: parsed.data.valor,
@@ -59,7 +58,6 @@ export async function actualizarIngreso(
   const { error } = await supabase
     .from("ingresos")
     .update({
-      cuenta_id: parsed.data.cuenta_id,
       categoria_id: parsed.data.categoria_id || null,
       fecha: parsed.data.fecha,
       valor: parsed.data.valor,

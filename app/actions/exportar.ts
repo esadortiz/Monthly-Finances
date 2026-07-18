@@ -7,7 +7,6 @@ type Filtros = {
   desde?: string
   hasta?: string
   categoria_id?: string
-  cuenta_id?: string
 }
 
 function escapeCSV(valor: string | number | null | undefined): string {
@@ -59,7 +58,7 @@ export async function exportarIngresos(filtros?: Filtros): Promise<string> {
   if (filtros?.desde) query = query.gte("fecha", filtros.desde)
   if (filtros?.hasta) query = query.lte("fecha", filtros.hasta)
   if (filtros?.categoria_id) query = query.eq("categoria_id", filtros.categoria_id)
-  if (filtros?.cuenta_id) query = query.eq("cuenta_id", filtros.cuenta_id)
+  if (filtros?.categoria_id) query = query.eq("categoria_id", filtros.categoria_id)
 
   const { data } = await query
   if (!data) return ""
@@ -70,7 +69,6 @@ export async function exportarIngresos(filtros?: Filtros): Promise<string> {
     { key: "descripcion", label: "Descripción" },
     { key: "valor", label: "Valor" },
     { key: "categoria_id", label: "Categoría" },
-    { key: "cuenta_id", label: "Cuenta ID" },
     { key: "creado_en", label: "Creado" },
   ])
 }
@@ -87,7 +85,6 @@ export async function exportarGastos(filtros?: Filtros): Promise<string> {
   if (filtros?.desde) query = query.gte("fecha", filtros.desde)
   if (filtros?.hasta) query = query.lte("fecha", filtros.hasta)
   if (filtros?.categoria_id) query = query.eq("categoria_id", filtros.categoria_id)
-  if (filtros?.cuenta_id) query = query.eq("cuenta_id", filtros.cuenta_id)
 
   const { data } = await query
   if (!data) return ""
@@ -98,7 +95,6 @@ export async function exportarGastos(filtros?: Filtros): Promise<string> {
     { key: "descripcion", label: "Descripción" },
     { key: "valor", label: "Valor" },
     { key: "categoria_id", label: "Categoría" },
-    { key: "cuenta_id", label: "Cuenta ID" },
     { key: "creado_en", label: "Creado" },
   ])
 }

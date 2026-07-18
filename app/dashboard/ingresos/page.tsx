@@ -15,7 +15,7 @@ import { DeleteIngresoButton } from "@/components/dashboard/ingresos/delete-ingr
 import { IngresosFilters } from "@/components/dashboard/ingresos/ingresos-filters"
 import { ExportButton } from "@/components/dashboard/export-button"
 import { exportarIngresos } from "@/app/actions/exportar"
-import type { Cuenta, Categoria, Ingreso } from "@/types/database"
+import type { Categoria, Ingreso } from "@/types/database"
 
 export default async function IngresosPage({
   searchParams,
@@ -23,7 +23,6 @@ export default async function IngresosPage({
   searchParams: Promise<{
     q?: string
     categoria?: string
-    cuenta?: string
     desde?: string
     hasta?: string
   }>
@@ -37,13 +36,8 @@ export default async function IngresosPage({
     redirect("/login")
   }
 
-  const [{ data: cuentas }, { data: categorias }, { data: ingresos }] =
+  const [{ data: categorias }, { data: ingresos }] =
     await Promise.all([
-      supabase
-        .from("cuentas")
-        .select("*")
-        .eq("usuario_id", user.id)
-        .order("nombre"),
       supabase
         .from("categorias")
         .select("*")
@@ -56,11 +50,9 @@ export default async function IngresosPage({
         .order("fecha", { ascending: false }),
     ])
 
-  const cuentasList = (cuentas ?? []) as Cuenta[]
   const categoriasList = (categorias ?? []) as Categoria[]
   const ingresosList = (ingresos ?? []) as Ingreso[]
 
-  const cuentaMap = new Map(cuentasList.map((c) => [c.id, c]))
   const categoriaMap = new Map(categoriasList.map((c) => [c.id, c]))
 
   const params = await searchParams
@@ -78,12 +70,6 @@ export default async function IngresosPage({
   if (params.categoria && params.categoria !== "all") {
     ingresosFiltrados = ingresosFiltrados.filter(
       (i) => i.categoria_id === params.categoria
-    )
-  }
-
-  if (params.cuenta && params.cuenta !== "all") {
-    ingresosFiltrados = ingresosFiltrados.filter(
-      (i) => i.cuenta_id === params.cuenta
     )
   }
 
@@ -111,12 +97,10 @@ export default async function IngresosPage({
             {ingresosList.length} registros
           </p>
         </div>
-        {cuentasList.length > 0 && (
           <div className="flex items-center gap-2 flex-wrap">
             <ExportButton action={exportarIngresos} fileName="ingresos.csv" />
-            <IngresoDialog cuentas={cuentasList} categorias={categoriasList} />
+            <IngresoDialog categorias={categoriasList} />
           </div>
-        )}
       </div>
 
       <Card>
@@ -129,7 +113,7 @@ export default async function IngresosPage({
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <IngresosFilters cuentas={cuentasList} categorias={categoriasList} />
+          <IngresosFilters categorias={categoriasList} />
           {ingresosFiltrados.length === 0 ? (
             <div className="flex h-[200px] items-center justify-center text-sm text-muted-foreground">
               {ingresosList.length === 0
@@ -143,14 +127,12 @@ export default async function IngresosPage({
                   <TableHead>Fecha</TableHead>
                   <TableHead className="hidden sm:table-cell">Descripción</TableHead>
                   <TableHead className="hidden md:table-cell">Categoría</TableHead>
-                  <TableHead className="hidden md:table-cell">Cuenta</TableHead>
                   <TableHead className="text-right">Valor</TableHead>
                   <TableHead className="w-[70px]"></TableHead>
                 </TableRow>
               </TableHeader>
               <StaggerRows>
                 {ingresosFiltrados.map((ingreso) => {
-                  const cuenta = cuentaMap.get(ingreso.cuenta_id)
                   const categoria = ingreso.categoria_id
                     ? categoriaMap.get(ingreso.categoria_id)
                     : null
@@ -193,9 +175,6 @@ export default async function IngresosPage({
                           <span className="text-muted-foreground">—</span>
                         )}
                       </TableCell>
-                      <TableCell className="hidden md:table-cell p-1.5 sm:p-2 text-sm">
-                        {cuenta?.nombre ?? "—"}
-                      </TableCell>
                       <TableCell className="p-1.5 sm:p-2 text-right font-medium text-emerald-600 tabular-nums whitespace-nowrap">
                         <span className="sm:hidden">$</span>
                         <span className="hidden sm:inline">+$</span>
@@ -204,7 +183,6 @@ export default async function IngresosPage({
                       <TableCell className="p-1.5 sm:p-2">
                         <div className="flex items-center gap-0.5 sm:gap-1">
                           <IngresoDialog
-                            cuentas={cuentasList}
                             categorias={categoriasList}
                             ingreso={ingreso}
                             triggerVariant="ghost"

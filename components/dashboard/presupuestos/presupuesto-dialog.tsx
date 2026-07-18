@@ -28,7 +28,6 @@ interface PresupuestoDialogProps {
 const periodos = [
   { value: "mensual", label: "Mensual" },
   { value: "quincenal", label: "Quincenal" },
-  { value: "15_dias", label: "15 Días" },
 ]
 
 const meses = [

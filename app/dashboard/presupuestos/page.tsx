@@ -25,7 +25,6 @@ const meses = [
 const periodoLabel: Record<string, string> = {
   mensual: "Mensual",
   quincenal: "Quincenal",
-  "15_dias": "15 Días",
 }
 
 function getProgressColor(gastado: number, monto: number): string {

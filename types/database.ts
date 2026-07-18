@@ -63,7 +63,7 @@ export interface Presupuesto {
   categoria_id: string | null
   nombre: string
   monto_mensual: number
-  periodo: 'mensual' | 'quincenal' | '15_dias'
+  periodo: 'mensual' | 'quincenal'
   mes: number
   anio: number
   gastado: number

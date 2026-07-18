@@ -25,6 +25,12 @@ interface PresupuestoDialogProps {
   triggerVariant?: "default" | "ghost"
 }
 
+const periodos = [
+  { value: "mensual", label: "Mensual" },
+  { value: "quincenal", label: "Quincenal" },
+  { value: "15_dias", label: "15 Días" },
+]
+
 const meses = [
   { value: "1", label: "Enero" },
   { value: "2", label: "Febrero" },
@@ -56,6 +62,7 @@ export function PresupuestoDialog({
     categoria_id: presupuesto?.categoria_id ?? "",
     nombre: presupuesto?.nombre ?? "",
     monto_mensual: presupuesto?.monto_mensual ?? 0,
+    periodo: presupuesto?.periodo ?? "mensual",
     mes: presupuesto?.mes?.toString() ?? mesActual,
     anio: presupuesto?.anio?.toString() ?? anioActual,
   })
@@ -66,6 +73,7 @@ export function PresupuestoDialog({
         categoria_id: presupuesto.categoria_id ?? "",
         nombre: presupuesto.nombre,
         monto_mensual: presupuesto.monto_mensual,
+        periodo: presupuesto.periodo,
         mes: presupuesto.mes.toString(),
         anio: presupuesto.anio.toString(),
       })
@@ -80,6 +88,7 @@ export function PresupuestoDialog({
       categoria_id: catId && catId !== "none" ? catId : null,
       nombre: formDataToSend.get("nombre") as string,
       monto_mensual: Number(formDataToSend.get("monto_raw")) || 0,
+      periodo: (formDataToSend.get("periodo") as string) || "mensual",
       mes: Number(formDataToSend.get("mes")),
       anio: Number(formDataToSend.get("anio")),
     }
@@ -128,8 +137,8 @@ export function PresupuestoDialog({
           <DialogTitle>{isEditing ? "Editar Presupuesto" : "Nuevo Presupuesto"}</DialogTitle>
           <DialogDescription>
             {isEditing
-              ? "Modifica los datos del presupuesto mensual"
-              : "Define un presupuesto mensual para controlar tus gastos"}
+              ? "Modifica los datos del presupuesto"
+              : "Define un presupuesto para controlar tus gastos"}
           </DialogDescription>
         </DialogHeader>
         <form action={handleSubmit} className="space-y-4">
@@ -145,12 +154,22 @@ export function PresupuestoDialog({
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="monto_mensual">Monto Mensual</Label>
+            <Label htmlFor="monto_mensual">Monto</Label>
             <CurrencyInput
               id="monto_mensual"
               name="monto"
               defaultValue={formData.monto_mensual || ""}
               required
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label>Período</Label>
+            <LabeledSelect
+              name="periodo"
+              defaultValue={formData.periodo}
+              placeholder="Selecciona el período"
+              options={periodos}
             />
           </div>
 

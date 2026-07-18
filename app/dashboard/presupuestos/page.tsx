@@ -22,6 +22,12 @@ const meses = [
   "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre",
 ]
 
+const periodoLabel: Record<string, string> = {
+  mensual: "Mensual",
+  quincenal: "Quincenal",
+  "15_dias": "15 Días",
+}
+
 function getProgressColor(gastado: number, monto: number): string {
   if (monto === 0) return "bg-muted"
   const ratio = gastado / monto
@@ -213,7 +219,7 @@ export default async function PresupuestosPage({
                         )}
                       </TableCell>
                       <TableCell className="hidden md:table-cell p-1.5 sm:p-2 text-sm text-muted-foreground">
-                        {meses[presupuesto.mes]} {presupuesto.anio}
+                        {meses[presupuesto.mes]} {presupuesto.anio} · {periodoLabel[presupuesto.periodo] || "Mensual"}
                       </TableCell>
                       <TableCell className="p-1.5 sm:p-2 text-right font-medium tabular-nums whitespace-nowrap">
                         ${Number(presupuesto.monto_mensual).toLocaleString("es-CO")}

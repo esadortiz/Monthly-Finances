@@ -79,6 +79,7 @@ export const presupuestoSchema = z.object({
   categoria_id: z.string().uuid().nullable().optional(),
   nombre: z.string().min(1, "Nombre requerido").max(100),
   monto_mensual: z.number().min(0).max(999999999),
+  periodo: z.enum(["mensual", "quincenal", "15_dias"]).default("mensual"),
   mes: z.number().int().min(1).max(12),
   anio: z.number().int().min(2020).max(2100),
 })

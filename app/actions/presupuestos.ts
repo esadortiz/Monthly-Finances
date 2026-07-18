@@ -32,6 +32,7 @@ export async function crearPresupuesto(input: Record<string, unknown>): Promise<
     categoria_id: parsed.data.categoria_id || null,
     nombre: sanitizeText(parsed.data.nombre),
     monto_mensual: parsed.data.monto_mensual,
+    periodo: parsed.data.periodo,
     mes: parsed.data.mes,
     anio: parsed.data.anio,
   })
@@ -62,6 +63,7 @@ export async function actualizarPresupuesto(
       categoria_id: parsed.data.categoria_id || null,
       nombre: sanitizeText(parsed.data.nombre),
       monto_mensual: parsed.data.monto_mensual,
+      periodo: parsed.data.periodo,
       mes: parsed.data.mes,
       anio: parsed.data.anio,
       actualizado_en: new Date().toISOString(),

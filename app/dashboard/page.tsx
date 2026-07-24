@@ -7,6 +7,9 @@ import { RecentTransactions } from "@/components/dashboard/recent-transactions"
 import { BudgetOverview } from "@/components/dashboard/budget-overview"
 import { BudgetAlerts } from "@/components/dashboard/budget-alerts"
 import { SavingsOverview } from "@/components/dashboard/savings-overview"
+import { SpendingByCategory } from "@/components/dashboard/analytics/spending-by-category"
+import { MonthlyTrend } from "@/components/dashboard/analytics/monthly-trend"
+import { SummaryTable } from "@/components/dashboard/analytics/summary-table"
 import { exportarMovimientos } from "@/app/actions/exportar"
 import type { Movimiento } from "@/types/database"
 
@@ -108,8 +111,42 @@ export default async function DashboardPage() {
     return { fecha: label, ingresos: ing, gastos: gas }
   })
 
+  const summaryData = ultimos6meses
+    .map(({ mes, anio }, index) => {
+      const { ingresos: ingresosMes, gastos: gastosMes } = chartData[index]
+      const label = new Date(anio, mes).toLocaleDateString("es-CO", {
+        month: "long",
+        year: "numeric",
+      })
+      return {
+        mes: label,
+        ingresos: ingresosMes,
+        gastos: gastosMes,
+        balance: ingresosMes - gastosMes,
+      }
+    })
+    .reverse()
+
   // Transacciones recientes
   const categoriaMap = new Map(categorias.map((c) => [c.id, c]))
+
+  const gastosAgrupados = new Map<string, { total: number; color: string }>()
+  for (const gasto of gastos) {
+    const categoria = gasto.categoria_id ? categoriaMap.get(gasto.categoria_id) : null
+    const nombre = categoria?.nombre ?? "Sin categoría"
+    const color = categoria?.color ?? "#6b7280"
+    const acumulado = gastosAgrupados.get(nombre) ?? { total: 0, color }
+    acumulado.total += Number(gasto.valor)
+    gastosAgrupados.set(nombre, acumulado)
+  }
+
+  const gastosPorCategoria = Array.from(gastosAgrupados, ([name, { total, color }]) => ({
+    name,
+    value: total,
+    color,
+  }))
+    .filter((item) => item.value > 0)
+    .sort((a, b) => b.value - a.value)
 
   const todosMovimientos: Movimiento[] = [
     ...ingresos.map((i) => ({
@@ -163,6 +200,22 @@ export default async function DashboardPage() {
         <BudgetOverview presupuestos={presupuestosMes} />
         <SavingsOverview metas={metasData} />
       </div>
+
+      <section className="space-y-6">
+        <div>
+          <h2 className="text-xl sm:text-2xl font-semibold tracking-tight">Análisis e Informes</h2>
+          <p className="text-sm text-muted-foreground">
+            Visualiza tus ingresos y gastos con gráficos detallados
+          </p>
+        </div>
+
+        <div className="grid gap-6 lg:grid-cols-2">
+          <SpendingByCategory data={gastosPorCategoria} />
+          <MonthlyTrend data={chartData} />
+        </div>
+
+        <SummaryTable data={summaryData} />
+      </section>
     </div>
   )
 }

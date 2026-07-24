@@ -156,13 +156,12 @@ La construcción de Monthly Finances se organiza en 5 fases incrementales, prior
 
 ### 🟡 FASE 2 — Control Financiero Avanzado
 
-**Objetivo:** Añadir herramientas de planificación financiera: presupuestos, metas de ahorro, deudas y recordatorios.
+**Objetivo:** Añadir herramientas de planificación financiera: presupuestos, metas de ahorro y deudas.
 
 **Módulos incluidos**
 - Presupuestos (por categoría y mes; mostrar presupuesto, gastado, disponible, % utilizado)
 - Metas de ahorro (ej. viaje, moto, casa, emergencias; mostrar meta, ahorrado, faltante, progreso)
 - Deudas (banco, tarjetas, personas, préstamos; campos: acreedor, valor, cuotas, fecha límite, estado)
-- Recordatorios (servicios, tarjetas, arriendo, créditos, seguros)
 
 **Requerimientos Funcionales cubiertos**
 
@@ -171,7 +170,6 @@ La construcción de Monthly Finances se organiza en 5 fases incrementales, prior
 | RF-10 | El usuario podrá crear presupuestos. |
 | RF-11 | El usuario podrá crear metas de ahorro. |
 | RF-12 | El usuario podrá registrar deudas. |
-| RF-17 | El sistema enviará recordatorios de pagos. |
 
 **Requerimientos No Funcionales cubiertos**
 
@@ -272,7 +270,6 @@ La construcción de Monthly Finances se organiza en 5 fases incrementales, prior
 | RF-14 | El usuario podrá exportar información a PDF, Excel y CSV. | 3 |
 | RF-15 | El usuario podrá consultar estadísticas financieras. | 3 |
 | RF-16 | El usuario podrá configurar su perfil. | 1 |
-| RF-17 | El sistema enviará recordatorios de pagos. | 2 |
 | RF-18 | Cada usuario solo podrá acceder a su propia información. | 1 |
 | RF-19 | El administrador podrá gestionar usuarios y monitorear la plataforma. | 4 |
 
@@ -299,7 +296,7 @@ La construcción de Monthly Finances se organiza en 5 fases incrementales, prior
 
 ```
 FASE 1 (MVP)        → Auth + Ingresos + Gastos + Categorías + Cuentas + Dashboard básico
-FASE 2 (Planeación) → Presupuestos + Metas de ahorro + Deudas + Recordatorios
+FASE 2 (Planeación) → Presupuestos + Metas de ahorro + Deudas
 FASE 3 (Análisis)   → Reportes + Gráficos + Calendario + Exportaciones
 FASE 4 (Admin)      → Panel administrativo + Escalabilidad + Planes
 FASE 5 (Innovación) → IA + OCR + Open Banking + App móvil + Premium + API pública

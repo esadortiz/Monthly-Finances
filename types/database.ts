@@ -85,20 +85,6 @@ export interface Deuda {
   actualizado_en: string
 }
 
-export interface Recordatorio {
-  id: string
-  usuario_id: string
-  titulo: string
-  descripcion: string | null
-  tipo: 'pago' | 'vencimiento' | 'personalizado'
-  fecha_recordatorio: string
-  fecha_vencimiento: string | null
-  completado: boolean
-  recurrencia: 'diaria' | 'semanal' | 'mensual' | 'anual' | null
-  creado_en: string
-  actualizado_en: string
-}
-
 export interface Movimiento {
   id: string
   tipo: 'ingreso' | 'gasto'

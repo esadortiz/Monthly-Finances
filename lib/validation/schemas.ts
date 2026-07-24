@@ -74,16 +74,6 @@ export const presupuestoSchema = z.object({
   anio: z.number().int().min(2020).max(2100),
 })
 
-export const recordatorioSchema = z.object({
-  titulo: z.string().min(1, "Título requerido").max(200),
-  descripcion: z.string().max(500).nullable().optional(),
-  tipo: z.enum(["pago", "vencimiento", "personalizado"]),
-  fecha_recordatorio: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Fecha inválida"),
-  fecha_vencimiento: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).nullable().optional(),
-  completado: z.boolean().optional(),
-  recurrencia: z.enum(["diaria", "semanal", "mensual", "anual"]).nullable().optional(),
-})
-
 export const perfilSchema = z.object({
   nombre: z.string().min(1, "Nombre requerido").max(100),
   apellido: z.string().min(1, "Apellido requerido").max(100),
@@ -101,4 +91,3 @@ export type GastoInput = z.infer<typeof gastoSchema>
 export type MetaAhorroInput = z.infer<typeof metaSchema>
 export type DeudaInput = z.infer<typeof deudaSchema>
 export type PresupuestoInput = z.infer<typeof presupuestoSchema>
-export type RecordatorioInput = z.infer<typeof recordatorioSchema>

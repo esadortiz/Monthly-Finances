@@ -7,7 +7,6 @@ import { RecentTransactions } from "@/components/dashboard/recent-transactions"
 import { BudgetOverview } from "@/components/dashboard/budget-overview"
 import { BudgetAlerts } from "@/components/dashboard/budget-alerts"
 import { SavingsOverview } from "@/components/dashboard/savings-overview"
-import { RemindersCard } from "@/components/dashboard/reminders-card"
 import { exportarMovimientos } from "@/app/actions/exportar"
 import type { Movimiento } from "@/types/database"
 
@@ -29,7 +28,7 @@ export default async function DashboardPage() {
   const mesActual = ahora.getMonth()
   const anioActual = ahora.getFullYear()
 
-  const [categoriasRes, ingresosRes, gastosRes, presupuestosRes, metasRes, deudasRes, recordatoriosRes] =
+  const [categoriasRes, ingresosRes, gastosRes, presupuestosRes, metasRes, deudasRes] =
     await Promise.all([
       supabase.from("categorias").select("*").eq("usuario_id", user.id).order("nombre"),
       supabase.from("ingresos").select("*").eq("usuario_id", user.id).order("fecha", { ascending: false }),
@@ -37,7 +36,6 @@ export default async function DashboardPage() {
       supabase.from("presupuestos").select("*").eq("usuario_id", user.id),
       supabase.from("metas_ahorro").select("*").eq("usuario_id", user.id).order("creado_en", { ascending: false }),
       supabase.from("deudas").select("*").eq("usuario_id", user.id).order("creado_en", { ascending: false }),
-      supabase.from("recordatorios").select("*").eq("usuario_id", user.id).not("completado", "eq", true).order("fecha_recordatorio", { ascending: true }).limit(5),
     ])
 
   const categorias = categoriasRes.data ?? []
@@ -46,7 +44,6 @@ export default async function DashboardPage() {
   const presupuestos = presupuestosRes.data ?? []
   const metas = metasRes.data ?? []
   const deudas = deudasRes.data ?? []
-  const recordatorios = recordatoriosRes.data ?? []
 
   const ingresos_mes = ingresos
     .filter((i) => {
@@ -137,15 +134,6 @@ export default async function DashboardPage() {
     .sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime())
     .slice(0, 8)
 
-  const recordatoriosData = recordatorios.map((r) => ({
-    id: r.id,
-    titulo: r.titulo,
-    descripcion: r.descripcion,
-    tipo: r.tipo,
-    fecha_recordatorio: r.fecha_recordatorio,
-    completado: r.completado,
-  }))
-
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
@@ -171,10 +159,9 @@ export default async function DashboardPage() {
         <RecentTransactions movimientos={todosMovimientos} />
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+      <div className="grid gap-4 md:grid-cols-2">
         <BudgetOverview presupuestos={presupuestosMes} />
         <SavingsOverview metas={metasData} />
-        <RemindersCard recordatorios={recordatoriosData} />
       </div>
     </div>
   )

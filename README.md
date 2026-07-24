@@ -17,7 +17,7 @@ Aplicación web para gestión de finanzas personales enfocada en el mercado colo
 - Gestión de ingresos, gastos, cuentas, categorías
 - Presupuestos mensuales
 - Metas de ahorro
-- Deudas y recordatorios
+- Deudas
 - Análisis y exportación de datos
 - Importación de movimientos desde CSV
 - Autenticación (login, registro, recuperación de contraseña)

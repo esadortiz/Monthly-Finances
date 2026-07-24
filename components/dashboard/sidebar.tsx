@@ -11,7 +11,6 @@ import {
   PiggyBank,
   Target,
   CreditCard,
-  CalendarClock,
   BarChart3,
   UserCircle,
   LogOut,
@@ -31,7 +30,6 @@ const navItems = [
   { href: "/dashboard/presupuestos", label: "Presupuestos", icon: PiggyBank },
   { href: "/dashboard/metas", label: "Metas", icon: Target },
   { href: "/dashboard/deudas", label: "Deudas", icon: CreditCard },
-  { href: "/dashboard/recordatorios", label: "Recordatorios", icon: CalendarClock },
   { href: "/dashboard/analisis", label: "Análisis", icon: BarChart3 },
   { href: "/dashboard/configuracion", label: "Perfil", icon: UserCircle },
 ]

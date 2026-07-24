@@ -36,15 +36,11 @@
 - Registra deudas: nombre, acreedor, monto total, tasa de interés, cuotas
 - Estados: Pendiente, Al día, Pagada
 
-## 8. Recordatorios
-- Crea recordatorios tipo pago, vencimiento o personalizado
-- Opción de recurrencia: diaria, semanal, mensual, anual
-
-## 9. Análisis
+## 8. Análisis
 - Visualiza estadísticas y gráficos de tus finanzas
 
-## 10. Perfil
+## 9. Perfil
 - Cambia tu nombre, apellido, teléfono y contraseña
 
-## 11. Exportar Todo
+## 10. Exportar Todo
 - Botón "Exportar Todo" en el panel principal descarga todos los movimientos en CSV

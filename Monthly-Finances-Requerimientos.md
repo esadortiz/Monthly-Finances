@@ -242,7 +242,6 @@ La construcción de Monthly Finances se organiza en 5 fases incrementales, prior
 - Lectura de facturas mediante OCR.
 - Escaneo de recibos.
 - Conexión con bancos (Open Banking).
-- Notificaciones push.
 - Aplicación móvil (iOS / Android).
 - Finanzas familiares.
 - Presupuestos compartidos.

@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useState } from 'react'
 import { signup } from '@/app/actions/auth'
 import { Mail, Lock, Eye, EyeOff, User } from 'lucide-react'
+import { AuthFloatingInput } from '@/components/auth/auth-floating-input'
 
 export function RegisterForm() {
   const searchParams = useSearchParams()
@@ -20,119 +21,75 @@ export function RegisterForm() {
 
       <form action={signup}>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div className="relative mb-[25px] group">
-            <i className="absolute left-0 top-3 text-gray-400 dark:text-white/60 text-base transition-colors duration-300 group-focus-within:text-black">
-              <User className="size-4" />
-            </i>
-            <input
-              id="nombre"
-              name="nombre"
-              type="text"
-              required
-              className="w-full pt-3 pb-3 pl-8 pr-2 text-base text-gray-900 dark:text-white bg-transparent border-none border-b border-b-gray-300 dark:border-b-white/30 outline-none transition-all duration-300 focus:border-b-black valid:border-b-black"
-            />
-            <label
-              htmlFor="nombre"
-              className="absolute top-3 left-8 text-gray-500 dark:text-white/70 pointer-events-none transition-all duration-300 group-focus-within:top-[-18px] group-focus-within:left-0 group-focus-within:text-xs group-focus-within:text-black group-focus-within:font-medium [&:has(~input:valid)]:top-[-18px] [&:has(~input:valid)]:left-0 [&:has(~input:valid)]:text-xs [&:has(~input:valid)]:text-black [&:has(~input:valid)]:font-medium"
+          <AuthFloatingInput
+            id="nombre"
+            name="nombre"
+            type="text"
+            label="Nombre"
+            icon={<User className="size-4" />}
+            wrapperClassName="mb-[25px]"
+            required
+          />
+
+          <AuthFloatingInput
+            id="apellido"
+            name="apellido"
+            type="text"
+            label="Apellido"
+            icon={<User className="size-4" />}
+            wrapperClassName="mb-[25px]"
+            required
+          />
+        </div>
+
+        <AuthFloatingInput
+          id="email"
+          name="email"
+          type="email"
+          label="Correo electrónico"
+          icon={<Mail className="size-4" />}
+          required
+        />
+
+        <AuthFloatingInput
+          id="password"
+          name="password"
+          type={showPassword ? 'text' : 'password'}
+          label="Contraseña"
+          icon={<Lock className="size-4" />}
+          required
+          minLength={6}
+          endAdornment={
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-1 top-2.5 text-gray-400 dark:text-white/50 hover:text-gray-600 dark:hover:text-white/80 transition-colors"
+              tabIndex={-1}
             >
-              Nombre
-            </label>
-          </div>
+              {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+            </button>
+          }
+        />
 
-          <div className="relative mb-[25px] group">
-            <i className="absolute left-0 top-3 text-gray-400 dark:text-white/60 text-base transition-colors duration-300 group-focus-within:text-black">
-              <User className="size-4" />
-            </i>
-            <input
-              id="apellido"
-              name="apellido"
-              type="text"
-              required
-              className="w-full pt-3 pb-3 pl-8 pr-2 text-base text-gray-900 dark:text-white bg-transparent border-none border-b border-b-gray-300 dark:border-b-white/30 outline-none transition-all duration-300 focus:border-b-black valid:border-b-black"
-            />
-            <label
-              htmlFor="apellido"
-              className="absolute top-3 left-8 text-gray-500 dark:text-white/70 pointer-events-none transition-all duration-300 group-focus-within:top-[-18px] group-focus-within:left-0 group-focus-within:text-xs group-focus-within:text-black group-focus-within:font-medium [&:has(~input:valid)]:top-[-18px] [&:has(~input:valid)]:left-0 [&:has(~input:valid)]:text-xs [&:has(~input:valid)]:text-black [&:has(~input:valid)]:font-medium"
+        <AuthFloatingInput
+          id="confirmPassword"
+          name="confirmPassword"
+          type={showConfirmPassword ? 'text' : 'password'}
+          label="Confirmar contraseña"
+          icon={<Lock className="size-4" />}
+          required
+          minLength={6}
+          endAdornment={
+            <button
+              type="button"
+              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              className="absolute right-1 top-2.5 text-gray-400 dark:text-white/50 hover:text-gray-600 dark:hover:text-white/80 transition-colors"
+              tabIndex={-1}
             >
-              Apellido
-            </label>
-          </div>
-        </div>
-
-        <div className="relative mb-[35px] group">
-          <i className="absolute left-0 top-3 text-gray-400 dark:text-white/60 text-base transition-colors duration-300 group-focus-within:text-black">
-            <Mail className="size-4" />
-          </i>
-          <input
-            id="email"
-            name="email"
-            type="email"
-            required
-            className="w-full pt-3 pb-3 pl-8 pr-2 text-base text-gray-900 dark:text-white bg-transparent border-none border-b border-b-gray-300 dark:border-b-white/30 outline-none transition-all duration-300 focus:border-b-black valid:border-b-black"
-          />
-          <label
-            htmlFor="email"
-            className="absolute top-3 left-8 text-gray-500 dark:text-white/70 pointer-events-none transition-all duration-300 group-focus-within:top-[-18px] group-focus-within:left-0 group-focus-within:text-xs group-focus-within:text-black group-focus-within:font-medium [&:has(~input:valid)]:top-[-18px] [&:has(~input:valid)]:left-0 [&:has(~input:valid)]:text-xs [&:has(~input:valid)]:text-black [&:has(~input:valid)]:font-medium"
-          >
-            Correo electrónico
-          </label>
-        </div>
-
-        <div className="relative mb-[35px] group">
-          <i className="absolute left-0 top-3 text-gray-400 dark:text-white/60 text-base transition-colors duration-300 group-focus-within:text-black">
-            <Lock className="size-4" />
-          </i>
-          <input
-            id="password"
-            name="password"
-            type={showPassword ? "text" : "password"}
-            required
-            minLength={6}
-            className="w-full pt-3 pb-3 pl-8 pr-10 text-base text-gray-900 dark:text-white bg-transparent border-none border-b border-b-gray-300 dark:border-b-white/30 outline-none transition-all duration-300 focus:border-b-black valid:border-b-black"
-          />
-          <button
-            type="button"
-            onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-1 top-2.5 text-gray-400 dark:text-white/50 hover:text-gray-600 dark:hover:text-white/80 transition-colors"
-            tabIndex={-1}
-          >
-            {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
-          </button>
-          <label
-            htmlFor="password"
-            className="absolute top-3 left-8 text-gray-500 dark:text-white/70 pointer-events-none transition-all duration-300 group-focus-within:top-[-18px] group-focus-within:left-0 group-focus-within:text-xs group-focus-within:text-black group-focus-within:font-medium [&:has(~input:valid)]:top-[-18px] [&:has(~input:valid)]:left-0 [&:has(~input:valid)]:text-xs [&:has(~input:valid)]:text-black [&:has(~input:valid)]:font-medium"
-          >
-            Contraseña
-          </label>
-        </div>
-
-        <div className="relative mb-[35px] group">
-          <i className="absolute left-0 top-3 text-gray-400 dark:text-white/60 text-base transition-colors duration-300 group-focus-within:text-black">
-            <Lock className="size-4" />
-          </i>
-          <input
-            id="confirmPassword"
-            name="confirmPassword"
-            type={showConfirmPassword ? "text" : "password"}
-            required
-            minLength={6}
-            className="w-full pt-3 pb-3 pl-8 pr-10 text-base text-gray-900 dark:text-white bg-transparent border-none border-b border-b-gray-300 dark:border-b-white/30 outline-none transition-all duration-300 focus:border-b-black valid:border-b-black"
-          />
-          <button
-            type="button"
-            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-            className="absolute right-1 top-2.5 text-gray-400 dark:text-white/50 hover:text-gray-600 dark:hover:text-white/80 transition-colors"
-            tabIndex={-1}
-          >
-            {showConfirmPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
-          </button>
-          <label
-            htmlFor="confirmPassword"
-            className="absolute top-3 left-8 text-gray-500 dark:text-white/70 pointer-events-none transition-all duration-300 group-focus-within:top-[-18px] group-focus-within:left-0 group-focus-within:text-xs group-focus-within:text-black group-focus-within:font-medium [&:has(~input:valid)]:top-[-18px] [&:has(~input:valid)]:left-0 [&:has(~input:valid)]:text-xs [&:has(~input:valid)]:text-black [&:has(~input:valid)]:font-medium"
-          >
-            Confirmar contraseña
-          </label>
-        </div>
+              {showConfirmPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+            </button>
+          }
+        />
 
         {error && (
           <p className="text-sm text-red-500 dark:text-red-400 text-center mb-4">{error}</p>

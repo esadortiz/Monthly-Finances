@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { motion } from "motion/react"
 import { useTheme } from "@/components/theme-provider"
-import { Moon, Sun, Bell, User } from "lucide-react"
+import { Moon, Sun, User } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 
@@ -29,12 +29,6 @@ export function Navbar() {
           >
             <Sun className="size-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
             <Moon className="absolute size-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-          </Button>
-        </motion.div>
-
-        <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-          <Button variant="ghost" size="icon-sm" aria-label="Notificaciones">
-            <Bell className="size-4" />
           </Button>
         </motion.div>
 

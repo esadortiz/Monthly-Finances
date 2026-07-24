@@ -1,6 +1,6 @@
 "use client"
 
-import { Bell } from "lucide-react"
+import { CalendarClock } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { cn } from "@/lib/utils"
 
@@ -30,7 +30,7 @@ export function RemindersCard({ recordatorios }: RemindersCardProps) {
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-base">
-          <Bell className="size-4" />
+          <CalendarClock className="size-4" />
           Próximos Recordatorios
         </CardTitle>
       </CardHeader>
